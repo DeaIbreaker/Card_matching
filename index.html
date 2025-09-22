@@ -10,11 +10,24 @@
         body {
             font-family: 'Inter', sans-serif;
             touch-action: manipulation;
-            background-image: url('https://placehold.co/1920x1080/0f172a/ffffff?text=Your+Background+Here');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            overflow: hidden; /* Prevent scrolling */
+            /* 2. This ensures the background gradient covers the full page, even when scrolling */
+            background-attachment: fixed;
+        }
+        /* Make body scrollable on mobile, but fixed on larger screens */
+        @media (max-width: 767px) {
+            body {
+                overflow-y: auto; /* Enable vertical scrolling */
+                height: auto;
+            }
+        }
+        /* 2. Allow scrolling on larger screens as well */
+        @media (min-width: 768px) {
+            body {
+                overflow-y: auto; /* Enable vertical scrolling */
+            }
         }
         .perspective {
             perspective: 1000px;
@@ -46,18 +59,25 @@
         .card.matched .card-inner {
             opacity: 1; /* Keep matched cards fully visible */
         }
-        /* The .disappeared CSS rule has been removed */
     </style>
 </head>
-<body class="bg-gradient-to-br from-green-800 to-lime-500 text-white h-screen flex flex-col items-center p-4">
+<body class="bg-gradient-to-br from-green-800 to-lime-500 text-white min-h-screen flex flex-col items-center p-4">
 
-    <!-- 1. Top one-third section for image and title -->
-    <header class="w-full max-w-5xl flex items-center justify-between p-4 flex-shrink-0" style="flex-basis: 20%;">
-        <!-- CUSTOMIZATION: Change the top-left image here -->
-        <img src="Top_left.png" alt="Game Logo" class="h-40 w-40 object-cover rounded-lg shadow-lg">
-        <div class="text-right">
+    <!-- 1. Top one-third section for image and title (with responsive layout) -->
+    <header class="w-full max-w-5xl flex md:flex-row flex-col items-center justify-between p-4 flex-shrink-0" style="flex-basis: 20%;">
+        <!-- CUSTOMIZATION: Laptop/Desktop Logo (Square) -->
+        <img src="Top_left.png" alt="Game Logo" class="h-24 w-24 object-cover rounded-lg shadow-lg hidden md:block">
+        <!-- CUSTOMIZATION: Mobile Logo (Rectangle) -->
+        <img src="Top_left.png" alt="Game Logo Mobile" class="h-20 w-48 object-contain mb-4 block md:hidden">
+        
+        <div class="md:text-right text-center">
             <h1 class="text-4xl md:text-5xl font-bold text-neutral-50">Play the E-Waste Memory Game!</h1>
             <p class="text-neutral-50 mt-2 text-lg">Match gadgets and discover why recycling them matters.</p>
+            <!-- 1. Moves and Matches counters are back -->
+            <div class="mt-4 flex justify-center md:justify-end gap-6">
+                <p class="text-lg"><span class="font-bold text-neutral-50" id="moves-counter">0</span> Moves</p>
+                <p class="text-lg"><span class="font-bold text-neutral-50" id="matches-counter">0 / 10</span> Matches</p>
+            </div>
         </div>
     </header>
 
@@ -65,7 +85,7 @@
     <div id="bottom-section" class="w-full flex-grow flex flex-col items-center justify-center">
         <!-- Game Area -->
         <div id="game-area" class="w-full flex flex-col items-center justify-center">
-            <main id="game-board" class="w-full max-w-xl grid grid-cols-4 md : grid-cols-5 gap-2.5 sm : gap-2"></main>
+            <main id="game-board" class="w-full max-w-3xl grid grid-cols-4 md:grid-cols-5 gap-2 sm:gap-3"></main>
             <button id="reset-button" class="mt-8 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
                 Reset Game
             </button>
@@ -74,8 +94,10 @@
         <!-- 3. Win Screen (replaces game area on completion) -->
         <div id="win-screen" class="hidden w-full flex flex-col items-center justify-center text-center">
             <!-- CUSTOMIZATION: Change the image shown on the win screen -->
-            <img src="Win_screen.png" alt="Victory" class="w-full max-w-sm mb-6 rounded-lg shadow-xl">
-            <div class="bg-neutral-50 backdrop-blur-sm rounded-lg p-8">
+            <!-- CONTROL SIZE: Adjust 'max-w-md' to make the image wider or narrower (e.g., max-w-lg, max-w-xl) -->
+            <img src="Win_screen.png" alt="Victory" class="w-full max-w-md mb-6 rounded-lg shadow-xl">
+             <!-- CONTROL SIZE: Adjust 'max-w-xl' to make the text box wider or narrower -->
+            <div class="bg-neutral-50 backdrop-blur-sm rounded-lg p-8 w-full max-w-xl">
                 <h2 class="text-3xl font-bold text-slate-950 mb-4">Well Done!</h2>
                 <p class="text-slate-950 mb-6">You've matched all the cards correctly. <p class = "text-slate-950 mb-6 break-normal">By learning the right way to recycle e-waste, you're helping to protect our environment and give old electronics a new life. <p class = "text-slate-950 mb-6 break-normal">Remember: Use the right bins or collection services for your e-waste. Every small action make a big difference!</p>
                 <button id="play-again-button" class="bg-neutral-100 hover:bg-neutral-200 text-slate-950 font-bold py-2 px-6 rounded-lg shadow-lg">
@@ -107,6 +129,8 @@
             const matchModalImage = document.getElementById('match-modal-image');
             const matchModalText = document.getElementById('match-modal-text');
             const nextMatchButton = document.getElementById('next-match-button');
+            const movesCounter = document.getElementById('moves-counter');
+            const matchesCounter = document.getElementById('matches-counter');
 
             const cardPairs = [
                 { 
@@ -216,6 +240,7 @@
             let secondCard = null;
             let lockBoard = false;
             let matchesFound = 0;
+            let moves = 0;
 
             function shuffle(array) {
                 array.sort(() => Math.random() - 0.5);
@@ -224,17 +249,22 @@
             function createBoard() {
                 gameBoard.innerHTML = '';
                 matchesFound = 0;
+                moves = 0;
+                movesCounter.textContent = moves;
+                matchesCounter.textContent = `${matchesFound} / ${cardsArray.length / 2}`;
                 shuffle(cardsArray);
 
                 cardsArray.forEach((cardData, index) => {
                     const card = document.createElement('div');
                     card.classList.add('card', 'aspect-square', 'w-full', 'cursor-pointer', 'perspective');
-                    /* 'h-20', 'sm:h-20', */
                     card.dataset.pairId = cardData.pairId;
                     card.dataset.index = index;
                     card.innerHTML = `
                         <div class="card-inner">
-                            <div class="card-back bg-green-700 hover:bg-green-800 transition-colors"></div>
+                            <div class="card-back bg-green-700 hover:bg-green-800 transition-colors overflow-hidden">
+                                <!-- 3. CUSTOMIZATION: This is the image for the back of the cards -->
+                                <img src="Top_left.png" alt="Card Back" class="w-full h-full object-cover">
+                            </div>
                             <div class="card-front bg-green-700 flex items-center justify-center p-1 rounded-md">
                                 ${cardData.value}
                             </div>
@@ -258,6 +288,8 @@
 
             function checkForMatch() {
                 lockBoard = true;
+                moves++;
+                movesCounter.textContent = moves;
                 const isMatch = firstCard.dataset.pairId === secondCard.dataset.pairId;
                 isMatch ? handleSuccessfulMatch() : unflipCards();
             }
@@ -276,6 +308,7 @@
                 firstCard.classList.add('matched');
                 secondCard.classList.add('matched');
                 matchesFound++;
+                matchesCounter.textContent = `${matchesFound} / ${cardsArray.length / 2}`;
             }
 
             function unflipCards() {
@@ -292,9 +325,6 @@
 
             function closeMatchModal() {
                 matchModal.classList.add('hidden');
-                
-                // The logic to make matched cards disappear has been removed. They will now stay visible.
-
                 resetBoardState();
                 
                 if (matchesFound === cardsArray.length / 2) {
