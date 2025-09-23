@@ -10,24 +10,6 @@
         body {
             font-family: 'Inter', sans-serif;
             touch-action: manipulation;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            /* 2. This ensures the background gradient covers the full page, even when scrolling */
-            background-attachment: fixed;
-        }
-        /* Make body scrollable on mobile, but fixed on larger screens */
-        @media (max-width: 767px) {
-            body {
-                overflow-y: auto; /* Enable vertical scrolling */
-                height: auto;
-            }
-        }
-        /* 2. Allow scrolling on larger screens as well */
-        @media (min-width: 768px) {
-            body {
-                overflow-y: auto; /* Enable vertical scrolling */
-            }
         }
         .perspective {
             perspective: 1000px;
@@ -59,73 +41,120 @@
         .card.matched .card-inner {
             opacity: 1; /* Keep matched cards fully visible */
         }
+
+        /* Styling for the animated background dots */
+        #background-wrap {
+            position: absolute; /* Changed to absolute to stay within the container */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0; /* Behind content but inside container */
+        }
+        .dot {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: move linear infinite;
+        }
+        @keyframes move {
+            0% { transform: translateY(100vh) scale(1); opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(0.5); opacity: 0; }
+        }
+        /* Ensure content is above the background dots */
+        header, #bottom-section {
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-green-800 to-lime-500 text-white min-h-screen flex flex-col items-center p-4">
+<body class="bg-white">
 
-    <!-- 1. Top one-third section for image and title (with responsive layout) -->
-    <header class="w-full max-w-5xl flex md:flex-row flex-col items-center justify-between p-4 flex-shrink-0" style="flex-basis: 20%;">
-        <!-- CUSTOMIZATION: Laptop/Desktop Logo (Square) -->
-        <img src="Top_left.png" alt="Game Logo" class="h-24 w-24 object-cover rounded-lg shadow-lg hidden md:block">
-        <!-- CUSTOMIZATION: Mobile Logo (Rectangle) -->
-        <img src="Top_left.png" alt="Game Logo Mobile" class="h-20 w-48 object-contain mb-4 block md:hidden">
-        
-        <div class="md:text-right text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-neutral-50">Play the E-Waste Memory Game!</h1>
-            <p class="text-neutral-50 mt-2 text-lg">Match gadgets and discover why recycling them matters.</p>
-            <!-- 1. Moves and Matches counters are back -->
-            <div class="mt-4 flex justify-center md:justify-end gap-6">
-                <p class="text-lg"><span class="font-bold text-neutral-50" id="moves-counter">0</span> Moves</p>
-                <p class="text-lg"><span class="font-bold text-neutral-50" id="matches-counter">0 / 10</span> Matches</p>
+    <!-- Main container to enforce mobile view on all screen sizes -->
+    <div id="game-container" class="bg-gradient-to-br from-cyan-500 to-sky-600 text-white min-h-screen flex flex-col items-center p-4 max-w-md mx-auto shadow-2xl relative overflow-y-auto">
+
+        <!-- Header with 75/25 split -->
+        <header class="w-full flex items-center justify-between p-4 flex-shrink-0">
+            <!-- Text Box (75%) -->
+            <div class="w-4/5 text-left">
+                <h1 class="text-3xl font-bold center text-neutral-50">Match It Right! 🧩🌍</h1>
+                <p class="text-neutral-50 mt-1 text-base">Play the E-Waste Memory Game! Match gadgets and discover why recycling them matters. 🌱</p>
+                <div class="mt-3 flex flex-col items-start gap-1">
+                    <p class="text-base"><span class="font-bold text-cyan-300" id="moves-counter">0</span> Moves</p>
+                    <p class="text-base"><span class="font-bold text-cyan-300" id="matches-counter">0 / 10</span> Matches</p>
+                </div>
+            </div>
+            <!-- Logo (25%) -->
+            <div class="w-1/5 flex justify-end">
+                <img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA logo white.png" alt="Game Logo" class="h-20 w-20 object-contain absolute top-0 right-0">
+            </div>
+        </header>
+
+        <!-- Game section -->
+        <div id="bottom-section" class="w-full flex-grow flex flex-col items-center justify-center">
+            <div id="game-area" class="w-full flex flex-col items-center justify-center">
+                <!-- Game board now always 4 columns -->
+                <main id="game-board" class="w-full max-w-3xl grid grid-cols-4 gap-3"></main>
+                <button id="reset-button" class="mt-8 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                    Reset Game
+                </button>
+            </div>
+
+            <!-- Win Screen -->
+            <div id="win-screen" class="hidden w-full flex flex-col items-center justify-center text-center">
+                <img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//Asset 2.png" alt="Victory" class="w-full max-w-sm mb-6 rounded-lg shadow-xl">
+                <div class="bg-neutral-50 bg-opacity-80 backdrop-blur-sm rounded-lg p-8 w-full">
+                    <h2 class="text-3xl font-bold text-slate-950 mb-4">Well Done!</h2>
+                    <p class="text-slate-950 mb-6">You've matched all the cards correctly.<p class = "text-slate-950 mb-6 break-normal">By learning the right way to recycle e-waste, you're helping to protect our environment and give old electronics a new life. <p class = "text-slate-950 mb-6 break-normal">Remember: Use the right bins or collection services for your e-waste. Every small action make a big difference!</p>
+                    <button id="play-again-button" class="bg-neutral-100 hover:bg-neutral-200 text-slate-950 font-bold py-2 px-6 rounded-lg shadow-lg">
+                        Play Again
+                    </button>
+                </div>
             </div>
         </div>
-    </header>
 
-    <!-- Bottom two-thirds section for the game -->
-    <div id="bottom-section" class="w-full flex-grow flex flex-col items-center justify-center">
-        <!-- Game Area -->
-        <div id="game-area" class="w-full flex flex-col items-center justify-center">
-            <main id="game-board" class="w-full max-w-3xl grid grid-cols-4 md:grid-cols-5 gap-2 sm:gap-3"></main>
-            <button id="reset-button" class="mt-8 bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-                Reset Game
-            </button>
-        </div>
-
-        <!-- 3. Win Screen (replaces game area on completion) -->
-        <div id="win-screen" class="hidden w-full flex flex-col items-center justify-center text-center">
-            <!-- CUSTOMIZATION: Change the image shown on the win screen -->
-            <!-- CONTROL SIZE: Adjust 'max-w-md' to make the image wider or narrower (e.g., max-w-lg, max-w-xl) -->
-            <img src="Win_screen.png" alt="Victory" class="w-full max-w-md mb-6 rounded-lg shadow-xl">
-             <!-- CONTROL SIZE: Adjust 'max-w-xl' to make the text box wider or narrower -->
-            <div class="bg-neutral-50 backdrop-blur-sm rounded-lg p-8 w-full max-w-xl">
-                <h2 class="text-3xl font-bold text-slate-950 mb-4">Well Done!</h2>
-                <p class="text-slate-950 mb-6">You've matched all the cards correctly. <p class = "text-slate-950 mb-6 break-normal">By learning the right way to recycle e-waste, you're helping to protect our environment and give old electronics a new life. <p class = "text-slate-950 mb-6 break-normal">Remember: Use the right bins or collection services for your e-waste. Every small action make a big difference!</p>
-                <button id="play-again-button" class="bg-neutral-100 hover:bg-neutral-200 text-slate-950 font-bold py-2 px-6 rounded-lg shadow-lg">
-                    Play Again
+        <!-- Pop-up Box for a successful match -->
+        <div id="match-modal" class="fixed inset-1 center bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
+            <div class="bg-neutral-50 rounded-lg shadow-2xl p-8 text-center max-w-md w-10/12 mx-4">
+                <img id="match-modal-image" src="" alt="Match Success" class="w-40 h-40 object-cover rounded-lg mx-auto mb-4">
+                <p id="match-modal-text" class="text-slate-950 mb-6 text-lg"></p>
+                <button id="next-match-button" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg">
+                    Next
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Pop-up Box for a successful match -->
-    <div id="match-modal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
-        <div class="bg-neutral-50 rounded-lg shadow-2xl p-8 text-center max-w-md w-full mx-4">
-            <img id="match-modal-image" src="" alt="Match Success" class="w-48 h-48 object-cover rounded-lg mx-auto mb-4">
-            <p id="match-modal-text" class="text-slate-950 mb-6 text-lg"></p>
-            <button id="next-match-button" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg">
-                Next
-            </button>
-        </div>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const gameContainer = document.getElementById('game-container');
+            const backgroundWrap = document.createElement('div');
+            backgroundWrap.id = 'background-wrap';
+            gameContainer.prepend(backgroundWrap); // Prepend to game-container
+
+            const numDots = 50; 
+            for (let i = 0; i < numDots; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                const size = Math.random() * 2 + 1;
+                dot.style.width = `${size}px`;
+                dot.style.height = `${size}px`;
+                dot.style.left = `${Math.random() * 100}%`;
+                const animationDuration = Math.random() * 15 + 15;
+                dot.style.animationDuration = `${animationDuration}s`;
+                const animationDelay = Math.random() * -animationDuration; 
+                dot.style.animationDelay = `${animationDelay}s`;
+                backgroundWrap.appendChild(dot);
+            }
+
             const gameArea = document.getElementById('game-area');
             const gameBoard = document.getElementById('game-board');
+            const matchModal = document.getElementById('match-modal');
             const resetButton = document.getElementById('reset-button');
             const winScreen = document.getElementById('win-screen');
             const playAgainButton = document.getElementById('play-again-button');
-            const matchModal = document.getElementById('match-modal');
             const matchModalImage = document.getElementById('match-modal-image');
             const matchModalText = document.getElementById('match-modal-text');
             const nextMatchButton = document.getElementById('next-match-button');
@@ -134,104 +163,104 @@
 
             const cardPairs = [
                 { 
-                    value: '<img src="https://placehold.co/100x100/3498db/ffffff?text=aaa" alt="aaa">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-01.jpg" alt="aaa">', 
                     pairId: 'item1',
-                    matchInfo: { image: 'https://placehold.co/200x200/3498db/ffffff?text=AAAaaa', text: 'You found the character AAAaaa!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-01.jpg', text: 'Only small household batteries (AA, AAA, AAAA, D, C, 9V & button cells) can go into the Batteries Bin.' }
                 }, 
                 { 
-                    value: '<img src="https://placehold.co/100x100/f1c40f/ffffff?text=AAA" alt="AAA">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-01.jpg" alt="AAA">', 
                     pairId: 'item1',
-                    matchInfo: { image: 'https://placehold.co/200x200/3498db/ffffff?text=AAAaaa', text: 'You found the character AAAaaa!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-01.jpg', text: 'Only small household batteries (AA, AAA, AAAA, D, C, 9V & button cells) can go into the Batteries Bin.' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/e74c3c/ffffff?text=bbb" alt="bbb">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-02.jpg" alt="bbb">', 
                     pairId: 'item2',
-                    matchInfo: { image: 'https://placehold.co/200x200/e74c3c/ffffff?text=BBBbbb', text: 'You found the character BBBbbb!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-02.jpg', text: 'The Batteries & Bulbs Bin accepts used light bulbs and small household batteries (AA, AAA, AAAA, D, C, 9V & button cells). ' }
                 }, 
                 { 
-                    value: '<img src="https://placehold.co/100x100/2ecc71/ffffff?text=BBB" alt="BBB">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-02.jpg" alt="BBB">', 
                     pairId: 'item2',
-                    matchInfo: { image: 'https://placehold.co/200x200/e74c3c/ffffff?text=BBBbbb', text: 'You found the character BBBbbb!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-02.jpg', text: 'The Batteries & Bulbs Bin accepts used light bulbs and small household batteries (AA, AAA, AAAA, D, C, 9V & button cells). ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/9b59b6/ffffff?text=ccc" alt="ccc">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-03.jpg" alt="ccc">', 
                     pairId: 'item3',
-                    matchInfo: { image: 'https://placehold.co/200x200/9b59b6/ffffff?text=CCCccc', text: 'You found the character CCCccc!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-03.jpg', text: 'Bulbs may contain mercury. If thrown away, they risk contaminating the environment. ' }
                 }, 
                 { 
-                    value: '<img src="https://placehold.co/100x100/e67e22/ffffff?text=CCC" alt="CCC">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-03.jpg" alt="CCC">', 
                     pairId: 'item3',
-                    matchInfo: { image: 'https://placehold.co/200x200/9b59b6/ffffff?text=CCCccc', text: 'You found the character CCCccc!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-03.jpg', text: 'Bulbs may contain mercury. If thrown away, they risk contaminating the environment. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/1abc9c/ffffff?text=ddd" alt="ddd">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-04.jpg" alt="ddd">', 
                     pairId: 'item4',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=DDDddd', text: 'You found the character DDDddd!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-04.jpg', text: 'Use the 3-in-1 bin for small batteries, bulbs, and ICT gadgets (like laptops, phones & TVs) that fit through its slot. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/34495e/ffffff?text=DDD" alt="ddd">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-04.jpg" alt="ddd">', 
                     pairId: 'item4',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=DDDddd', text: 'You found the character DDDddd!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-04.jpg', text: 'Use the 3-in-1 bin for small batteries, bulbs, and ICT gadgets (like laptops, phones & TVs) that fit through its slot. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/1abc9c/ffffff?text=eee" alt="eee">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-05.jpg" alt="eee">', 
                     pairId: 'item5',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=EEEeee', text: 'You found the character EEEeee!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-05.jpg', text: 'Laptops contain batteries and circuit boards with toxic substances. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/34495e/ffffff?text=EEE" alt="EEE">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-05.jpg" alt="EEE">', 
                     pairId: 'item5',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=EEEeee', text: 'You found the character EEEeee!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-05.jpg', text: 'Laptops contain batteries and circuit boards with toxic substances. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/1abc9c/ffffff?text=fff" alt="fff">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-06.jpg" alt="fff">', 
                     pairId: 'item6',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=FFFfff', text: 'You found the character FFFfff!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-06.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/34495e/ffffff?text=FFF" alt="FFF">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-06.jpg" alt="FFF">', 
                     pairId: 'item6',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=FFFfff', text: 'You found the character FFFfff!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-06.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/1abc9c/ffffff?text=ggg" alt="ggg">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-07.jpg" alt="ggg">', 
                     pairId: 'item7',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=GGGggg', text: 'You found the character GGGggg!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-07.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/34495e/ffffff?text=GGG" alt="GGG">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-07.jpg" alt="GGG">', 
                     pairId: 'item7',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=GGGggg', text: 'You found the character GGGggg!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-07.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/1abc9c/ffffff?text=hhh" alt="hhh">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-08.jpg" alt="hhh">', 
                     pairId: 'item8',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=HHHhhh', text: 'You found the character HHHhhh!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-08.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/34495e/ffffff?text=HHH" alt="HHH">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-08.jpg" alt="HHH">', 
                     pairId: 'item8',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=HHHhhh', text: 'You found the character HHHhhh!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-08.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/1abc9c/ffffff?text=iii" alt="iii">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-09.jpg" alt="iii">', 
                     pairId: 'item9',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=IIIiii', text: 'You found the character IIIiii!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-09.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/34495e/ffffff?text=III" alt="III">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-09.jpg" alt="III">', 
                     pairId: 'item9',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=IIIiii', text: 'You found the character IIIiii!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-09.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/1abc9c/ffffff?text=jjj" alt="jjj">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-10.jpg" alt="jjj">', 
                     pairId: 'item10',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=JJJjjj', text: 'You found the character JJJjjj!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-10.jpg', text: 'Power banks contain lithium batteries that can spark fire if trashed. ' }
                 },
                 { 
-                    value: '<img src="https://placehold.co/100x100/34495e/ffffff?text=JJJ" alt="JJJ">', 
+                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-10.jpg" alt="JJJ">', 
                     pairId: 'item10',
-                    matchInfo: { image: 'https://placehold.co/200x200/1abc9c/ffffff?text=JJJjjj', text: 'You found the character JJJjjj!' }
+                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-10.jpg', text: 'Power banks contain lithium batteries that can spark fire if trashed. ' }
                 },
             ];
 
@@ -262,10 +291,9 @@
                     card.innerHTML = `
                         <div class="card-inner">
                             <div class="card-back bg-green-700 hover:bg-green-800 transition-colors overflow-hidden">
-                                <!-- 3. CUSTOMIZATION: This is the image for the back of the cards -->
-                                <img src="Top_left.png" alt="Card Back" class="w-full h-full object-cover">
+                                <img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification.jpg" alt="Card Back" class="w-full h-full object-cover">
                             </div>
-                            <div class="card-front bg-green-700 flex items-center justify-center p-1 rounded-md">
+                            <div class="card-front bg-sky-300 flex items-center justify-center p-1 rounded-md">
                                 ${cardData.value}
                             </div>
                         </div>
@@ -295,15 +323,14 @@
             }
 
             function handleSuccessfulMatch() {
-                const cardIndex = firstCard.dataset.index;
-                const info = cardsArray[cardIndex].matchInfo;
+                const info = cardsArray.find(c => c.pairId === firstCard.dataset.pairId).matchInfo;
                 
                 matchModalImage.src = info.image;
                 matchModalText.textContent = info.text;
                 
                 setTimeout(() => {
                     matchModal.classList.remove('hidden');
-                }, 600); // Wait for flip animation to finish
+                }, 600); 
 
                 firstCard.classList.add('matched');
                 secondCard.classList.add('matched');
