@@ -73,22 +73,31 @@
 <body class="bg-white">
 
     <!-- Main container to enforce mobile view on all screen sizes -->
-    <div id="game-container" class="bg-gradient-to-br from-cyan-500 to-sky-600 text-white min-h-screen flex flex-col items-center p-4 max-w-md mx-auto shadow-2xl relative overflow-y-auto">
-
+    <div id="game-container" 
+            class="bg-no-repeat bg-contain bg-center bg-blend-saturation  text-white min-h-screen flex flex-col items-center p-4 max-w-md mx-auto shadow-2xl relative overflow-y-auto" 
+            style="
+                background-image: 
+                    linear-gradient(to top right, #06b6d4, #0369a1),
+                    url('Asset 3.png'); 
+                background-size: cover, contain; /* first layer = cover, second = contain */
+                background-repeat: no-repeat, no-repeat;
+                background-position: center, top;
+            ">
         <!-- Header with 75/25 split -->
-        <header class="w-full flex items-center justify-between p-4 flex-shrink-0">
+        <header class="w-full flex items-center justify-between p-4 flex-shrink-0 rounded-xl  relative overflow-hidden">
+            <div class="absolute inset-x-0 top-0 bg-black opacity-30"></div> <!-- This is the overlay for text readability -->
             <!-- Text Box (75%) -->
             <div class="w-4/5 text-left">
-                <h1 class="text-3xl font-bold center text-neutral-50">Match It Right! 🧩🌍</h1>
-                <p class="text-neutral-50 mt-1 text-base">Play the E-Waste Memory Game! Match gadgets and discover why recycling them matters. 🌱</p>
-                <div class="mt-3 flex flex-col items-start gap-1">
+                <h1 class="text-4xl font-bold text-justify text-neutral-50">Match It Right!</h1>
+                <p class="text-neutral-50 mt-1 text-base break-normal">Play the E-Waste Memory Game! <p class = "text-neutral-50 mt-1 text-base break-normal leading-5">Match gadgets and discover why recycling them matters. 🌱</p>
+                <div class="grid grid-cols-2 grid-rows-1 gap-1">
                     <p class="text-base"><span class="font-bold text-cyan-300" id="moves-counter">0</span> Moves</p>
                     <p class="text-base"><span class="font-bold text-cyan-300" id="matches-counter">0 / 10</span> Matches</p>
                 </div>
             </div>
             <!-- Logo (25%) -->
             <div class="w-1/5 flex justify-end">
-                <img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA logo white.png" alt="Game Logo" class="h-20 w-20 object-contain absolute top-0 right-0">
+                <img src="NEA logo white.png" alt="Game Logo" class="h-20 w-20 object-contain absolute top-0 right-0">
             </div>
         </header>
 
@@ -104,7 +113,7 @@
 
             <!-- Win Screen -->
             <div id="win-screen" class="hidden w-full flex flex-col items-center justify-center text-center">
-                <img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//Asset 2.png" alt="Victory" class="w-full max-w-sm mb-6 rounded-lg shadow-xl">
+                <img src="Asset 2.png" alt="Victory" class="w-full max-w-sm mb-6 rounded-lg shadow-xl">
                 <div class="bg-neutral-50 bg-opacity-80 backdrop-blur-sm rounded-lg p-8 w-full">
                     <h2 class="text-3xl font-bold text-slate-950 mb-4">Well Done!</h2>
                     <p class="text-slate-950 mb-6">You've matched all the cards correctly.<p class = "text-slate-950 mb-6 break-normal">By learning the right way to recycle e-waste, you're helping to protect our environment and give old electronics a new life. <p class = "text-slate-950 mb-6 break-normal">Remember: Use the right bins or collection services for your e-waste. Every small action make a big difference!</p>
@@ -163,104 +172,104 @@
 
             const cardPairs = [
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-01.jpg" alt="aaa">', 
+                    value: '<img src="NEA_IEWD_Gamification-01.jpg" alt="aaa">', 
                     pairId: 'item1',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-01.jpg', text: 'Only small household batteries (AA, AAA, AAAA, D, C, 9V & button cells) can go into the Batteries Bin.' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-01.jpg', text: 'Only small household batteries (AA, AAA, AAAA, D, C, 9V & button cells) can go into the Batteries Bin.' }
                 }, 
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-01.jpg" alt="AAA">', 
+                    value: '<img src="NEA_IEWD_Gamification-01.jpg" alt="AAA">', 
                     pairId: 'item1',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-01.jpg', text: 'Only small household batteries (AA, AAA, AAAA, D, C, 9V & button cells) can go into the Batteries Bin.' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-01.jpg', text: 'Only small household batteries (AA, AAA, AAAA, D, C, 9V & button cells) can go into the Batteries Bin.' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-02.jpg" alt="bbb">', 
+                    value: '<img src="NEA_IEWD_Gamification-02.jpg" alt="bbb">', 
                     pairId: 'item2',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-02.jpg', text: 'The Batteries & Bulbs Bin accepts used light bulbs and small household batteries (AA, AAA, AAAA, D, C, 9V & button cells). ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-02.jpg', text: 'The Batteries & Bulbs Bin accepts used light bulbs and small household batteries (AA, AAA, AAAA, D, C, 9V & button cells). ' }
                 }, 
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-02.jpg" alt="BBB">', 
+                    value: '<img src="NEA_IEWD_Gamification-02.jpg" alt="BBB">', 
                     pairId: 'item2',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-02.jpg', text: 'The Batteries & Bulbs Bin accepts used light bulbs and small household batteries (AA, AAA, AAAA, D, C, 9V & button cells). ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-02.jpg', text: 'The Batteries & Bulbs Bin accepts used light bulbs and small household batteries (AA, AAA, AAAA, D, C, 9V & button cells). ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-03.jpg" alt="ccc">', 
+                    value: '<img src="NEA_IEWD_Gamification-03.jpg" alt="ccc">', 
                     pairId: 'item3',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-03.jpg', text: 'Bulbs may contain mercury. If thrown away, they risk contaminating the environment. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-03.jpg', text: 'Bulbs may contain mercury. If thrown away, they risk contaminating the environment. ' }
                 }, 
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-03.jpg" alt="CCC">', 
+                    value: '<img src="NEA_IEWD_Gamification-03.jpg" alt="CCC">', 
                     pairId: 'item3',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-03.jpg', text: 'Bulbs may contain mercury. If thrown away, they risk contaminating the environment. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-03.jpg', text: 'Bulbs may contain mercury. If thrown away, they risk contaminating the environment. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-04.jpg" alt="ddd">', 
+                    value: '<img src="NEA_IEWD_Gamification-04.jpg" alt="ddd">', 
                     pairId: 'item4',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-04.jpg', text: 'Use the 3-in-1 bin for small batteries, bulbs, and ICT gadgets (like laptops, phones & TVs) that fit through its slot. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-04.jpg', text: 'Use the 3-in-1 bin for small batteries, bulbs, and ICT gadgets (like laptops, phones & TVs) that fit through its slot. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-04.jpg" alt="ddd">', 
+                    value: '<img src="NEA_IEWD_Gamification-04.jpg" alt="ddd">', 
                     pairId: 'item4',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-04.jpg', text: 'Use the 3-in-1 bin for small batteries, bulbs, and ICT gadgets (like laptops, phones & TVs) that fit through its slot. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-04.jpg', text: 'Use the 3-in-1 bin for small batteries, bulbs, and ICT gadgets (like laptops, phones & TVs) that fit through its slot. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-05.jpg" alt="eee">', 
+                    value: '<img src="NEA_IEWD_Gamification-05.jpg" alt="eee">', 
                     pairId: 'item5',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-05.jpg', text: 'Laptops contain batteries and circuit boards with toxic substances. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-05.jpg', text: 'Laptops contain batteries and circuit boards with toxic substances. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-05.jpg" alt="EEE">', 
+                    value: '<img src="NEA_IEWD_Gamification-05.jpg" alt="EEE">', 
                     pairId: 'item5',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-05.jpg', text: 'Laptops contain batteries and circuit boards with toxic substances. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-05.jpg', text: 'Laptops contain batteries and circuit boards with toxic substances. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-06.jpg" alt="fff">', 
+                    value: '<img src="NEA_IEWD_Gamification-06.jpg" alt="fff">', 
                     pairId: 'item6',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-06.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-06.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-06.jpg" alt="FFF">', 
+                    value: '<img src="NEA_IEWD_Gamification-06.jpg" alt="FFF">', 
                     pairId: 'item6',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-06.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-06.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-07.jpg" alt="ggg">', 
+                    value: '<img src="NEA_IEWD_Gamification-07.jpg" alt="ggg">', 
                     pairId: 'item7',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-07.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-07.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-07.jpg" alt="GGG">', 
+                    value: '<img src="NEA_IEWD_Gamification-07.jpg" alt="GGG">', 
                     pairId: 'item7',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-07.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-07.jpg', text: 'Old phones are packed with gold, silver and copper. Recycling millions of them saves tonnes of precious resources. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-08.jpg" alt="hhh">', 
+                    value: '<img src="NEA_IEWD_Gamification-08.jpg" alt="hhh">', 
                     pairId: 'item8',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-08.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-08.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-08.jpg" alt="HHH">', 
+                    value: '<img src="NEA_IEWD_Gamification-08.jpg" alt="HHH">', 
                     pairId: 'item8',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-08.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-08.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-09.jpg" alt="iii">', 
+                    value: '<img src="NEA_IEWD_Gamification-09.jpg" alt="iii">', 
                     pairId: 'item9',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-09.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-09.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-09.jpg" alt="III">', 
+                    value: '<img src="NEA_IEWD_Gamification-09.jpg" alt="III">', 
                     pairId: 'item9',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-09.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-09.jpg', text: 'Even small batteries can leak acid and heavy metals into soil and water. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-10.jpg" alt="jjj">', 
+                    value: '<img src="NEA_IEWD_Gamification-10.jpg" alt="jjj">', 
                     pairId: 'item10',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-10.jpg', text: 'Power banks contain lithium batteries that can spark fire if trashed. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-10.jpg', text: 'Power banks contain lithium batteries that can spark fire if trashed. ' }
                 },
                 { 
-                    value: '<img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-10.jpg" alt="JJJ">', 
+                    value: '<img src="NEA_IEWD_Gamification-10.jpg" alt="JJJ">', 
                     pairId: 'item10',
-                    matchInfo: { image: 'D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification-10.jpg', text: 'Power banks contain lithium batteries that can spark fire if trashed. ' }
+                    matchInfo: { image: 'NEA_IEWD_Gamification-10.jpg', text: 'Power banks contain lithium batteries that can spark fire if trashed. ' }
                 },
             ];
 
@@ -291,7 +300,7 @@
                     card.innerHTML = `
                         <div class="card-inner">
                             <div class="card-back bg-green-700 hover:bg-green-800 transition-colors overflow-hidden">
-                                <img src="D://MyBOX//Imcomms//Project//Card_matching_APP//Picture//Gamification Cards//NEA_IEWD_Gamification.jpg" alt="Card Back" class="w-full h-full object-cover">
+                                <img src="NEA_IEWD_Gamification.jpg" alt="Card Back" class="w-full h-full object-cover">
                             </div>
                             <div class="card-front bg-sky-300 flex items-center justify-center p-1 rounded-md">
                                 ${cardData.value}
